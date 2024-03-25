@@ -156,6 +156,10 @@ class LinearRegressionGUI:
     self.repeat_check.pack()
     self.repeat.set(1)
 
+    # button to start plot
+    self.plot_button = tk.Button(self.master, text="Start Plot", command=self.start_plot)
+    self.plot_button.pack()
+
   def show_table(self, headers):
     # Clear existing table
     for widget in self.table_frame.winfo_children():
