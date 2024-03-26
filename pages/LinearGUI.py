@@ -1,104 +1,16 @@
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import font
 import numpy as np
 import csv
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import tkinter as tk
 
 
-class LogisticRegressionCalculator:
-  def __init__(self, X, Y, B=[]):
-    self.X = X
-    self.Y = Y
-    if B:
-      self.b = B
-    else:
-      self.b = [0, 0]
-
-  def update_coeffs(self, learning_rate):
-    Y_pred = self.predict()  # predict Y values based on current coefficients
-    Y = self.Y  # actual Y values
-    m = len(Y)  # number of samples
-    # Update the coefficients using gradient descent
-    self.b[0] = self.b[0] - (learning_rate * (1/m) * np.sum(Y_pred - Y))  # update a0
-    self.b[1] = self.b[1] - (learning_rate * (1/m) * np.sum((Y_pred - Y) * self.X))  # update a1
-
-  def predict(self, X=[]):
-    Y_pred = np.array([])
-    if not X:
-      X = self.X
-    b = self.b
-    for x in X:
-      z = b[0] + (b[1] * x)
-      sigmoid = 1 / (1 + np.exp(-z))
-      Y_pred = np.append(Y_pred, sigmoid)
-
-    return Y_pred
-
-  def get_current_accuracy(self, Y_pred):
-    p, e = Y_pred, self.Y
-    # update data for protect division by zero
-    p = p[e != 0]
-    e = e[e != 0]
-    # Mean Absolute Error
-    return 1 - np.mean(np.abs((p - e) / e))
-
-  def plot_best_fit(self, Y_pred, title):
-    plt.scatter(self.X, self.Y, color='b')
-    plt.plot(self.X, Y_pred, color='g')
-    plt.title(title)
-    plt.show()
-
-  def plot_animation(self, epochs, learning_rate, is_repeat=True):
-    epochs = epochs + 1
-    Y_pred = self.predict()
-    # splot anamation
-    fig, ax = plt.subplots()
-    # line = ax.plot(self.X, self.Y, color='b')
-    line = ax.plot(self.X, Y_pred, color='g')
-    ax.plot(self.X, self.Y, 'ro')
-
-    current_epoch = ax.text(0.02, 0.95, "", transform=ax.transAxes)
-    current_epoch.set_text("Epoch: 0")
-
-    current_accuracy = ax.text(0.02, 0.90, "", transform=ax.transAxes)
-    current_accuracy.set_text(f"Accuracy: {self.get_current_accuracy(Y_pred)}")
-
-    current_cost_function_text = ax.text(0.02, 0.85, "", transform=ax.transAxes)
-    current_cost_function_text.set_text("Cost Function: ")
-
-    current_function = ax.text(0.02, 0.80, "", transform=ax.transAxes)
-    current_function.set_text("Function: y = a0 + a1*x")
-
-    plt.title('Gradient Descent')
-    plt.xlabel('X')
-    plt.ylabel('Y')
-
-    def animate(i):
-      global Y_pred
-      Y_pred = self.predict()
-      self.update_coeffs(learning_rate)
-      line[0].set_ydata(Y_pred)
-      current_epoch.set_text("Epoch: %d" % i)
-      current_accuracy.set_text(f"Accuracy: {self.get_current_accuracy(Y_pred)}")
-      current_cost_function_text.set_text(f"Cost Function: {np.sum((Y_pred - self.Y) ** 2)}")
-      current_function.set_text(f"Function: y = {self.b[0]} + {self.b[1]}*x")
-      if i == epochs - 1:
-        self.b = [0, 0]  # reset coefficients after reaching the last epoch
-      return line
-
-    ani = animation.FuncAnimation(fig, animate, frames=epochs, repeat=is_repeat, interval=0.1)
-    plt.show()
-
-
-class LogisticRegressionGUI:
+class LinearRegressionGUI:
   def __init__(self, master):
     self.master = master
-    master.title("Logistic Regression GUI")
+    master.title("Linear Regression GUI")
 
-    # gui to select data and run logistic regression
+    # gui to select data and run linear regression
     self.label = tk.Label(master, text="Select a CSV file:")
     self.label.pack()
 
@@ -139,7 +51,7 @@ class LogisticRegressionGUI:
     self.learning_rate_entry.pack()
     self.learning_rate_entry.insert(0, "0.01")
 
-    # parameters for logistic regression
+    # parameters for linear regression
     self.label = tk.Label(self.master, text="Enter initial coefficients:")
     self.label.pack()
     self.a0_label = tk.Label(self.master, text="a0:")
@@ -217,14 +129,6 @@ class LogisticRegressionGUI:
     # is repeat
     repeat = self.repeat.get()
 
-    # Create a LogisticRegressionCalculator object
-    lr = LogisticRegressionCalculator(X, Y, coe)
-    lr.plot_animation(epochs=epochs, learning_rate=learning_rate, is_repeat=repeat)
-
-
-if __name__ == "__main__":
-  root = tk.Tk()
-  root.geometry("800x600")
-  root.resizable(False, False)
-  my_gui = LogisticRegressionGUI(root)
-  root.mainloop()
+    # Create a LinearRegressionCalculator object
+    # lr = LinearRegression(X, Y, coe)
+    # lr.plot_animation(epochs=epochs, learning_rate=learning_rate, is_repeat=repeat)

@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import font
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
@@ -8,21 +7,20 @@ import matplotlib.animation as animation
 
 
 class LinearRegressionCalculator:
-  def __init__(self, X, Y, B=[]):
+  def __init__(self, X, Y):
     self.X = X
     self.Y = Y
-    if B:
-      self.b = B
-    else:
-      self.b = [0, 0]
+    # y = mx+b
+    self.m = 0  # ความชัน
+    self.b = 0  # ค่าคงที่
 
   def update_coeffs(self, learning_rate):
     Y_pred = self.predict()  # predict Y values based on current coefficients
     Y = self.Y  # actual Y values
     m = len(Y)  # number of samples
-    # Update the coefficients using gradient descent
-    self.b[0] = self.b[0] - (learning_rate * (1/m) * np.sum(Y_pred - Y))  # update a0
-    self.b[1] = self.b[1] - (learning_rate * (1/m) * np.sum((Y_pred - Y) * self.X))  # update a1
+    # Update the coefficients using gradient descent MSE
+    self.m = self.m - learning_rate * (1 / m) * np.sum((Y_pred - Y) * self.X)
+    self.b = self.b - learning_rate * (1 / m) * np.sum(Y_pred - Y)
 
   def predict(self, X=[]):
     Y_pred = np.array([])
@@ -30,7 +28,7 @@ class LinearRegressionCalculator:
       X = self.X
     b = self.b
     for x in X:
-      Y_pred = np.append(Y_pred, b[0] + (b[1] * x))
+      Y_pred = np.append(Y_pred, b + self.m * x)
 
     return Y_pred
 
@@ -81,9 +79,10 @@ class LinearRegressionCalculator:
       current_epoch.set_text("Epoch: %d" % i)
       current_accuracy.set_text(f"Accuracy: {self.get_current_accuracy(Y_pred)}")
       current_cost_function_text.set_text(f"Cost Function: {np.sum((Y_pred - self.Y) ** 2)}")
-      current_function.set_text(f"Function: y = {self.b[0]} + {self.b[1]}*x")
+      current_function.set_text(f"Function: y = {self.b} + {self.m}*x")
       if i == epochs - 1:
-        self.b = [0, 0]  # reset coefficients after reaching the last epoch
+        self.b = 0
+        self.m = 0
       return line
 
     ani = animation.FuncAnimation(fig, animate, frames=epochs, repeat=is_repeat, interval=0.1)
@@ -105,9 +104,6 @@ class LinearRegressionGUI:
     # show table of data
     self.table_frame = tk.Frame(master)
     self.table_frame.pack()
-
-    self.quit_button = tk.Button(master, text="Quit", command=master.quit)
-    self.quit_button.pack()
 
   def open_csv_file(self):
     file_path = tk.filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
@@ -135,20 +131,6 @@ class LinearRegressionGUI:
     self.learning_rate_entry = tk.Entry(self.master)
     self.learning_rate_entry.pack()
     self.learning_rate_entry.insert(0, "0.01")
-
-    # parameters for linear regression
-    self.label = tk.Label(self.master, text="Enter initial coefficients:")
-    self.label.pack()
-    self.a0_label = tk.Label(self.master, text="a0:")
-    self.a0_label.pack()
-    self.a0_entry = tk.Entry(self.master)
-    self.a0_entry.pack()
-    self.a0_entry.insert(0, "1")
-    self.a1_label = tk.Label(self.master, text="a1:")
-    self.a1_label.pack()
-    self.a1_entry = tk.Entry(self.master)
-    self.a1_entry.pack()
-    self.a1_entry.insert(0, "0.5")
 
     # is checkbox repeat
     self.repeat = tk.IntVar()
@@ -202,11 +184,6 @@ class LinearRegressionGUI:
     X = np.array([float(row[0]) for row in self.data])
     Y = np.array([float(row[1]) for row in self.data])
 
-    # get initial coefficients
-    a0 = float(self.a0_entry.get())
-    a1 = float(self.a1_entry.get())
-    coe = [a0, a1]
-
     # get epochs and learning rate
     epochs = int(self.epoch_entry.get())
     learning_rate = float(self.learning_rate_entry.get())
@@ -215,7 +192,7 @@ class LinearRegressionGUI:
     repeat = self.repeat.get()
 
     # Create a LinearRegressionCalculator object
-    lr = LinearRegressionCalculator(X, Y, coe)
+    lr = LinearRegressionCalculator(X, Y)
     lr.plot_animation(epochs=epochs, learning_rate=learning_rate, is_repeat=repeat)
 
 
