@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 # mini_batch_gradient_descent function to reduce cost and find best coeff and intercept
-def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01):
+def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01, repeat=True):
   # initialization of coeff and y_intercept
   coeff = y_intercept = 0
 
@@ -68,7 +68,7 @@ def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01):
       y_intercept = y_intercept-alpha*y_intercept_derivative
 
   plt.suptitle("MINI-BATCH GRADIENT DESCENT & COST FUNCTION PLOT")
-  animate = camera.animate(repeat=True)
+  animate = camera.animate(repeat=repeat)
   # animate.save('mini_batch.gif', writer='pillow')
   plt.show()
 

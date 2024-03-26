@@ -7,7 +7,7 @@ from celluloid import Camera
 
 
 # gradient_descent function to reduce cost and find best coeff and intercept
-def batch_gradient_descent(x, y, epochs=100, alpha=0.01):
+def batch_gradient_descent(x, y, epochs=100, alpha=0.01, repeat=True):
   # initialization of coeff and y_intercept
   coeff = y_intercept = 0
 
@@ -65,7 +65,7 @@ def batch_gradient_descent(x, y, epochs=100, alpha=0.01):
   plt.suptitle("BATCH GRADIENT DESCENT & COST FUNCTION PLOT")
 
   # animate the snapshots
-  animate = camera.animate()
+  animate = camera.animate(repeat=repeat)
 
   # save
   # animate.save('gradient.gif', writer='pillow')

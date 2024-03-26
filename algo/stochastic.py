@@ -5,7 +5,7 @@ from celluloid import Camera
 
 
 # gradient_descent function to reduce cost and find best coeff and intercept
-def stochastic_gradient_descent(x, y, epochs=10, alpha=0.01):
+def stochastic_gradient_descent(x, y, epochs=10, alpha=0.01, repeat=True):
   # initialization of coeff and y_intercept
   coeff = y_intercept = 0
 
@@ -63,7 +63,7 @@ def stochastic_gradient_descent(x, y, epochs=10, alpha=0.01):
       y_intercept = y_intercept - alpha*y_intercept_derivative
 
   plt.suptitle("STOCHASTIC GRADIENT DESCENT & COST FUNCTION PLOT")
-  animate = camera.animate()
+  animate = camera.animate(repeat=repeat)
   # animate.save('stochastic.gif', writer='pillow')
   plt.show()
 
