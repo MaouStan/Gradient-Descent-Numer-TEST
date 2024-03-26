@@ -8,7 +8,7 @@ from celluloid import Camera
 def stochastic_gradient_descent(x, y):
   coeff = y_intercept = 0
   alpha = 0.01
-  epochs = 15
+  epochs = 3
   fig = plt.figure(figsize=(13, 6))
   camera = Camera(fig)
   iter_lst = []
@@ -22,7 +22,7 @@ def stochastic_gradient_descent(x, y):
       iter_lst.append(i*n+j)
       plt.subplot(121)
       plt.scatter(x, y, color='green')
-      plt.text(x=1, y=0, s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
+      plt.text(x=np.min(x), y=np.max(y), s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
       plt.xlabel('Independent Variable (x)')
       plt.ylabel('Response Variable (y)')
       plt.plot(x, coeff*x+y_intercept, color='red')
@@ -30,7 +30,7 @@ def stochastic_gradient_descent(x, y):
       plt.xlabel('Number of epochs (x)')
       plt.ylabel('Cost function (y)')
       plt.plot(iter_lst, cost_lst, color='blue')
-      plt.text(x=1, y=1, s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12})
+      plt.text(x=np.min(x), y=np.max(cost_lst), s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12}, ha='right', va='top')
       camera.snap()
       coeff_derivative = -2*x[j]*(y[j]-y_predicted)
       y_intercept_derivative = -2*(y[j]-y_predicted)
@@ -45,7 +45,7 @@ def stochastic_gradient_descent(x, y):
 if __name__ == "__main__":
   headers = []
   data = []
-  with open("data/demo1.csv", 'r') as file:
+  with open("data/linear_data.csv", 'r') as file:
     csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values
     # copy column headers
     headers = next(csv_reader)[0].split(',')

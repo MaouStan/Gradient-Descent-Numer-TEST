@@ -42,7 +42,7 @@ def gradient_descent(x, y):
     # creation of subplots to visualize cost & coeff,intercept
     plt.subplot(121)
     plt.scatter(x, y, color='green')
-    plt.text(x=1, y=0, s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
+    plt.text(x=np.min(x), y=np.max(y), s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
     plt.xlabel('Independent Variable (x)')
     plt.ylabel('Response Variable (y)')
     plt.plot(x, y_predicted, color='red')
@@ -50,7 +50,7 @@ def gradient_descent(x, y):
     plt.xlabel('Number of epochs (x)')
     plt.ylabel('Cost function (y)')
     plt.plot(iter_lst, cost_lst, color='blue')
-    plt.text(x=50, y=100, s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12})
+    plt.text(x=np.min(x), y=np.max(cost_lst), s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12})
 
     # capturing snapshot of each & every iteration
     camera.snap()

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from celluloid import Camera
 
 
-def mini_batch_gradient_descent(x, y, batch_size=32, epochs=10, alpha=0.01):
+def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01):
   coeff = y_intercept = 0
   n = len(x)
   fig = plt.figure(figsize=(13, 6))
@@ -22,7 +22,7 @@ def mini_batch_gradient_descent(x, y, batch_size=32, epochs=10, alpha=0.01):
       iter_lst.append(i*n+j)
       plt.subplot(121)
       plt.scatter(x, y, color='green')
-      plt.text(x=1, y=0, s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
+      plt.text(x=np.min(x), y=np.max(y), s="y-intercept: {:1f} & coeff: {:1f}".format(y_intercept, coeff), fontdict={'fontsize': 12})
       plt.xlabel('Independent Variable (x)')
       plt.ylabel('Response Variable (y)')
       plt.plot(x, coeff*x + y_intercept, color='red')
@@ -30,7 +30,7 @@ def mini_batch_gradient_descent(x, y, batch_size=32, epochs=10, alpha=0.01):
       plt.xlabel('Number of epochs (x)')
       plt.ylabel('Cost function (y)')
       plt.plot(iter_lst, cost_lst, color='blue')
-      plt.text(x=1, y=1, s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12})
+      plt.text(x=np.min(x), y=np.max(cost_lst), s="Cost: {:1f}".format(cost), fontdict={'fontsize': 12})
       camera.snap()
       coeff_derivative = -(2/batch_size)*(np.sum(batch_x*(batch_y-y_predicted)))
       y_intercept_derivative = -(2/batch_size)*(np.sum(batch_y-y_predicted))
