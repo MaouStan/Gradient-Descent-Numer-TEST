@@ -9,7 +9,7 @@ from minibatch import mini_batch_gradient_descent
 if __name__ == "__main__":
   headers = []
   data = []
-  with open("data/linear_data.csv", 'r') as file:
+  with open("data/linear_data_10.csv", 'r') as file:
     csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values
     # copy column headers
     headers = next(csv_reader)[0].split(',')

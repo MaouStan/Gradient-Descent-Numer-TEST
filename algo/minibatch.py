@@ -57,10 +57,10 @@ def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01, repea
       camera.snap()
 
       # partial derivative of coeff
-      coeff_derivative = -(2/batch_size)*(np.sum(batch_x*(batch_y-y_predicted)))
+      coeff_derivative = -(1/batch_size)*(np.sum(batch_x*(batch_y-y_predicted)))
 
       # parital derivative of intercept
-      y_intercept_derivative = -(2/batch_size)*(np.sum(batch_y-y_predicted))
+      y_intercept_derivative = -(1/batch_size)*(np.sum(batch_y-y_predicted))
 
       # update coeff and intercept iteratively
       # newweight = oldweight - learning_rate * partialderivatives
@@ -76,7 +76,7 @@ def mini_batch_gradient_descent(x, y, batch_size=4, epochs=10, alpha=0.01, repea
 if __name__ == "__main__":
   headers = []
   data = []
-  with open("data/linear_data.csv", 'r') as file:
+  with open("data/linear_data_10.csv", 'r') as file:
     csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values
     # copy column headers
     headers = next(csv_reader)[0].split(',')

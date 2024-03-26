@@ -8,6 +8,7 @@ from celluloid import Camera
 
 # gradient_descent function to reduce cost and find best coeff and intercept
 def batch_gradient_descent(x, y, epochs=100, alpha=0.01, repeat=True):
+  # y = mx + c
   # initialization of coeff and y_intercept
   coeff = y_intercept = 0
 
@@ -51,14 +52,14 @@ def batch_gradient_descent(x, y, epochs=100, alpha=0.01, repeat=True):
     # capturing snapshot of each & every iteration
     camera.snap()
 
-    # partial derivative of coeff
+    # gradient derivative of coeff
     coeff_derivative = -(1/n)*(np.sum(x*(y-y_predicted)))
 
-    # parital derivative of intercept
+    # gradient derivative of intercept
     y_intercept_derivative = -(1/n)*(np.sum(y-y_predicted))
 
     # update coeff and intercept iteratively
-    # newweight = oldweight - learning_rate * partialderivatives
+    # newweight = oldweight - learning_rate * gradient
     coeff = coeff - alpha*coeff_derivative
     y_intercept = y_intercept - alpha*y_intercept_derivative
 
@@ -79,7 +80,7 @@ if __name__ == "__main__":
   data = []
   # file path popup select file from system tk
   # file_path = filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
-  file_path = "data/linear_data.csv"
+  file_path = "data/linear_data_10.csv"
 
   with open(file_path, 'r') as file:
     csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values

@@ -52,10 +52,10 @@ def stochastic_gradient_descent(x, y, epochs=10, alpha=0.01, repeat=True):
       camera.snap()
 
       # partial derivative of coeff
-      coeff_derivative = -(2/n)*(x[j]*(y[j]-y_predicted))
+      coeff_derivative = -(1/n)*(x[j]*(y[j]-y_predicted))
 
       # parital derivative of intercept
-      y_intercept_derivative = -(2/n)*(y[j]-y_predicted)
+      y_intercept_derivative = -(1/n)*(y[j]-y_predicted)
 
       # update coeff and intercept iteratively
       # newweight = oldweight - learning_rate * partialderivatives
@@ -71,7 +71,7 @@ def stochastic_gradient_descent(x, y, epochs=10, alpha=0.01, repeat=True):
 if __name__ == "__main__":
   headers = []
   data = []
-  with open("data/linear_data.csv", 'r') as file:
+  with open("data/linear_data_10.csv", 'r') as file:
     csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values
     # copy column headers
     headers = next(csv_reader)[0].split(',')
@@ -81,4 +81,4 @@ if __name__ == "__main__":
     y = np.array([float(row[1]) for row in data])
 
     # function call
-    stochastic_gradient_descent(x, y)
+    stochastic_gradient_descent(x, y, epochs=10)
