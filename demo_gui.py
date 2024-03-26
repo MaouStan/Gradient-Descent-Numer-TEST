@@ -1,7 +1,12 @@
+import csv
 import tkinter as tk
+from tkinter import filedialog
 from tkinter import font
 
-from pages.LinearRegressionGUI import LinearRegressionGUI
+import numpy as np
+
+# from pages.LinearRegressionGUI import LinearRegressionGUI
+from algo.batch import batch_gradient_descent
 
 # demo gui first page has 3 buttons to open new windows
 # linear regression, logistic regression, and neural network
@@ -12,31 +17,34 @@ class DemoGui:
     self.master = master
     master.title("Demo GUI")
 
-    # layout grid
-    for i in range(3):
-      master.grid_rowconfigure(i, weight=1)
-      master.grid_columnconfigure(0, weight=1)
+    # gui to select data and run linear regression
+    self.label = tk.Label(master, text="Select a CSV file:")
+    self.label.pack()
 
-    self.linear_regression_button = tk.Button(master, text="Linear Regression", command=self.open_linear_regression, fg="white", bg="blue", font=("Arial", 18, font.BOLD))
-    self.linear_regression_button.grid(row=0, column=0, sticky="ew", padx=10, pady=30)
+    self.file_button = tk.Button(master, text="Open", command=self.open_csv_file)
+    self.file_button.pack()
 
-    self.logistic_regression_button = tk.Button(master, text="Logistic Regression", command=self.open_logistic_regression, fg="white", bg="green", font=("Arial", 18, font.BOLD))
-    self.logistic_regression_button.grid(row=1, column=0, sticky="ew", padx=10, pady=30)
+  def open_csv_file(self):
+    file_path = tk.filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
+    if file_path:
+      with open(file_path, 'r') as file:
+        csv_reader = csv.reader(file, delimiter='\t')  # Set delimiter to '\t' for tab-separated values
+        # copy column headers
+        headers = next(csv_reader)[0].split(',')
+        self.data = [row[0].split(',') for row in csv_reader]
+        self.X = np.array([float(row[0]) for row in self.data], dtype=np.float64)
+        self.Y = np.array([float(row[1]) for row in self.data], dtype=np.float64)
+        self.show_buttons()
 
-    self.neural_network_button = tk.Button(master, text="Neural Network", command=self.open_neural_network, fg="white", bg="orange", font=("Arial", 18, font.BOLD))
-    self.neural_network_button.grid(row=2, column=0, sticky="ew", padx=10, pady=30)
+  def show_buttons(self):
+    self.batch_gradient_button = tk.Button(self.master, text="Batch Gradient", command=self.open_batch_gradient, fg="white", bg="blue", font=("Arial", 18, font.BOLD))
+    self.batch_gradient_button.pack()
 
-  def open_linear_regression(self):
-    linear_regression_window = tk.Toplevel(self.master)
-    linear_regression_window.title("Linear Regression")
-    linear_regression_window.geometry("800x600")
-    LinearRegressionGUI(linear_regression_window)
-
-  def open_logistic_regression(self):
-    ...
-
-  def open_neural_network(self):
-    ...
+  def open_batch_gradient(self):
+    # batch_gradient_window = tk.Toplevel(self.master)
+    # batch_gradient_window.title("Linear Regression")
+    # batch_gradient_window.geometry("800x600")
+    batch_gradient_descent(self.X, self.Y, epochs=10, alpha=0.1)
 
 
 if __name__ == "__main__":

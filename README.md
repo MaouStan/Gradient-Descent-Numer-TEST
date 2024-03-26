@@ -18,5 +18,5 @@ pip install -r requirements.txt
 After installing the necessary packages, you can run the code in `demo_gui.py`:
 
 ```bash
-python demo_gui.py
+python algo/all.py
 ```
